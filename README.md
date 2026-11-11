@@ -1,22 +1,33 @@
-
 # LeetCode Tracker
 
-**An official college portal for tracking student problem-solving progress at Dr. N.G.P. Institute of Technology.**
+**Official student problem-solving progress portal for Dr. N.G.P. Institute of Technology.**
 
-Built by the Department of Computer Science and Engineering in three months, the portal gives institutional staff a shared view of student LeetCode activity, class progress, assignments, and streaks. The production portal is live.
+Built by the Department of Computer Science and Engineering in three months, LeetCode Tracker gives institutional staff a shared view of student LeetCode activity, class progress, assignments, and streaks. The production portal is live.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Application Map](#application-map)
+- [Architecture](#architecture)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Known Limitations](#known-limitations)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
 
 ## Overview
 
-LeetCode Tracker provides role-aware dashboards for institutional staff and student-facing progress views. Staff access is scoped by role and class assignments, with HOD and Dean access supporting broader department or institution-level views.
+The portal provides role-aware dashboards for institutional staff and student-facing progress views. Staff access is scoped by role and class assignment, with HOD and Dean roles supporting broader department- and institution-level views.
 
-### Capabilities
+### Features
 
 - Staff dashboards for HODs, Deans, teachers, tutors, and class advisors
 - Class and student progress views, including solved-problem totals and streaks
-- Activity and task-management pages, including class-specific task details
+- Activity and task management, including class-specific task details
 - Student directory, staff details, class views, and account settings
 - Supabase authentication and data access
-- Student data export utilities and dashboard visualizations
+- Student data export (Excel and PDF) and dashboard visualizations
 
 ## Application Map
 
@@ -92,49 +103,54 @@ flowchart TD
 	sync -. "not yet connected to LeetCode or database writes" .-> supabase
 ```
 
-## Technology
+## Technology Stack
 
-- [Next.js](https://nextjs.org/) 16 with the App Router
-- [React](https://react.dev/) 19 and [TypeScript](https://www.typescriptlang.org/)
-- [Supabase](https://supabase.com/) for authentication and database access
-- [Tailwind CSS](https://tailwindcss.com/) 4 for styling
-- Recharts and Framer Motion for visualizations and motion
-- xlsx and jsPDF for export support
+| Layer | Technology |
+| --- | --- |
+| Framework | [Next.js](https://nextjs.org/) 16 (App Router) |
+| UI | [React](https://react.dev/) 19, [TypeScript](https://www.typescriptlang.org/) |
+| Backend | [Supabase](https://supabase.com/) (authentication and database) |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) 4 |
+| Visualization and motion | Recharts, Framer Motion |
+| Export | xlsx, jsPDF |
+| Fonts | [Geist](https://vercel.com/font) via `next/font` |
 
-## Run Locally
+## Getting Started
 
-### Requirements
+### Prerequisites
 
 - Node.js compatible with the installed Next.js version
 - npm
-- A Supabase project with the portal's required schema and staff accounts
+- A Supabase project with the portal's required schema and linked staff accounts
 
-### Setup
+### Installation
 
-1. Install dependencies:
+1. **Install dependencies**
 
-	 ```bash
-	 npm install
-	 ```
+   ```bash
+   npm install
+   ```
 
-2. Create `.env.local` in the project root and add your Supabase project values:
+2. **Configure environment variables**
 
-	 ```dotenv
-	 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
-	 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
-	 ```
+   Create `.env.local` in the project root:
 
-	 Use the publishable key intended for client-side use. Do not expose a Supabase service-role key through a `NEXT_PUBLIC_` variable.
+   ```dotenv
+   NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
+   ```
 
-3. Start the development server:
+   > Use the publishable key intended for client-side use. Never expose a Supabase service-role key through a `NEXT_PUBLIC_` variable.
 
-	 ```bash
-	 npm run dev
-	 ```
+3. **Start the development server**
 
-4. Open [http://localhost:3000](http://localhost:3000).
+   ```bash
+   npm run dev
+   ```
 
-### Available Commands
+4. Open [http://localhost:3000](http://localhost:3000). The app reloads as you edit files (for example, `app/page.tsx`).
+
+### Available Scripts
 
 | Command | Description |
 | --- | --- |
@@ -149,60 +165,32 @@ flowchart TD
 app/
 	api/sync/              LeetCode sync endpoint
 	dashboard/             Staff, student, class, admin, and settings routes
-	login/                  Sign-in page
+	login/                 Sign-in page
 components/
-	layout/                 Dashboard shell, sidebar, and top navigation
-	staff-dashboard/        Class, settings, and leaderboard panels
-	ui/                     Shared interface components
+	layout/                Dashboard shell, sidebar, and top navigation
+	staff-dashboard/       Class, settings, and leaderboard panels
+	ui/                    Shared interface components
 lib/
-	hooks/                  Staff class data hook
-	supabase/               Browser and server Supabase clients
-	export-utils.ts         Student export helpers
-	mock-data.ts            Sample dashboard data
-proxy.ts                  Authentication and role-aware route access
-types/                    Shared application types
+	hooks/                 Staff class data hook
+	supabase/              Browser and server Supabase clients
+	export-utils.ts        Student export helpers
+	mock-data.ts           Sample dashboard data
+proxy.ts                 Authentication and role-aware route access
+types/                   Shared application types
 ```
 
-## Data and Deployment Notes
+## Known Limitations
 
-- The staff dashboard and Supabase client utilities use the configured Supabase project. Access depends on valid project credentials, the expected database tables, and correctly linked staff accounts.
-- The admin overview currently uses sample data from `lib/mock-data.ts`; its displayed metrics should not be treated as live institutional totals.
-- `POST /api/sync` currently returns a simulated success response. Fetching LeetCode data and writing refreshed summaries to Supabase are not implemented in that endpoint yet.
-- The production portal is live. Configure the same Supabase environment variables in the deployment environment; the live URL is not included here.
+- **Admin overview uses sample data.** `/dashboard/admin` reads from `lib/mock-data.ts`; its metrics are not live institutional totals.
+- **LeetCode sync is a stub.** `POST /api/sync` returns a simulated success response. Fetching LeetCode data and writing refreshed summaries to Supabase are not yet implemented.
+- **Supabase dependency.** The staff dashboard requires valid project credentials, the expected database tables, and correctly linked staff accounts.
+
+## Deployment
+
+The production portal is live (the URL is intentionally not listed here). To deploy, configure the same Supabase environment variables listed above in your hosting environment. The project is a standard Next.js app and can be hosted on [Vercel](https://vercel.com/) or any platform that supports Next.js. See the [Next.js deployment docs](https://nextjs.org/docs/app/building-your-application/deploying) for details.
 
 ## Contributing
 
-Before opening a change, run `npm run lint` and `npm run build`. Keep credentials and student information out of source control, screenshots, and issue reports.
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Make your changes on a branch.
+2. Run `npm run lint` and `npm run build` before opening a change.
+3. Keep credentials and student information out of source control, screenshots, and issue reports.
