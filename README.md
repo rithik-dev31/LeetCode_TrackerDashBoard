@@ -57,7 +57,7 @@ flowchart TD
 		activity["Activities"]
 		tasks["Task management and class task details"]
 		directory["Student directory and staff details"]
-		class["Class views"]
+		classes["Class views"]
 		student["Student profile"]
 		admin["Admin overview"]
 		settings["Settings"]
@@ -85,7 +85,7 @@ flowchart TD
 	activity --> shell
 	tasks --> shell
 	directory --> shell
-	class --> shell
+	classes --> shell
 	student --> shell
 	admin --> shell
 	settings --> shell
